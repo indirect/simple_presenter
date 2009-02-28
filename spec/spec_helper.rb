@@ -1,4 +1,13 @@
-require File.join(File.dirname(__FILE__), '../../../../spec/spec_helper.rb')
+begin # try rubygems first
+  require 'rubygems'
+  gem 'activesupport'
+  require 'active_support/vendor/builder-2.1.2/blankslate'
+rescue
+  require 'active_support/vendor/builder-2.1.2/blankslate'
+end
+
+require 'lib/simple_presenter'
+
 
 # dummy controller to call #present on
 class Controller
