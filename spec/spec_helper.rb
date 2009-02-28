@@ -6,10 +6,10 @@ class Controller
 end
 
 # dummy presenters to test against
-class ArrayPresenter < SimplePresenter::Base
+class ArrayPresenter < SimplePresenter
 end
 
-class StringPresenter < SimplePresenter::Base
+class StringPresenter < SimplePresenter
   def ascii_numbers
     # returns an array of the integer number each char in the string represents
     presentable.unpack("c*")
@@ -23,5 +23,5 @@ end
 
 # unhide some methods so we can test the presentery proxy classes
 [:should, :should_not, :instance_of?, :inspect, :class].each do |sym|
-  [ArrayPresenter, StringPresenter, SimplePresenter::Base].each{|p| p.reveal(sym) }
+  [ArrayPresenter, StringPresenter, SimplePresenter].each{|p| p.reveal(sym) }
 end

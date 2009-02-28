@@ -10,7 +10,7 @@ Usage
 
 In `app/presenter/foo_presenter.rb`:
 
-    class FooPresenter < SimplePresenter::Base
+    class FooPresenter < SimplePresenter
       def to_json
         {:id => id, :name => name}.to_json
       end

@@ -1,21 +1,21 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe SimplePresenter::Base do
+describe SimplePresenter do
   before(:all) do
     @renderer = Controller.new
     @presentable = String.new
   end
 
   it "should take a presentable and a renderer when initialized" do
-    SimplePresenter::Base.new(@presentable, @renderer)
+    SimplePresenter.new(@presentable, @renderer)
   end
 
   it "should store presentable in an attribute" do
-    SimplePresenter::Base.new(@presentable, @renderer).presentable.should == @presentable
+    SimplePresenter.new(@presentable, @renderer).presentable.should == @presentable
   end
 
   it "should store renderer in an attribute" do
-    SimplePresenter::Base.new(@presentable, @renderer).renderer.should == @renderer
+    SimplePresenter.new(@presentable, @renderer).renderer.should == @renderer
   end
 
 end
@@ -31,13 +31,24 @@ describe SimplePresenter::Helper do
 
     context "when given an object with no presenter" do
       it "should return a default presenter" do
-        Controller.new.present({:a => 1}).class.should be(SimplePresenter::Base)
+        Controller.new.present({:a => 1}).class.
+          ancestors.should include(SimplePresenter)
       end
     end
 
     context "when given an object with a specific presenter" do
       it "should return that specific presenter" do
-        Controller.new.present([1,2,3]).class.ancestors.should include(ArrayPresenter)
+        Controller.new.present([1,2,3]).class.
+          ancestors.should include(ArrayPresenter)
+      end
+    end
+
+    context "when called instances of different classes on a single renderer" do
+      it "should return specific presenters for each" do
+        @c = Controller.new
+        @c.present("bob").class.ancestors.should include(StringPresenter)
+        @c.present([1,2,3]).class.ancestors.should include(ArrayPresenter)
+        @c.present({:a => 1}).class.ancestors.should include(SimplePresenter)
       end
     end
 
