@@ -18,23 +18,9 @@ module SimplePresenter
       @renderer = renderer
     end
 
-    def is_a_presenter?
-      true
-    end
-
     def method_missing(sym, *args)
       @presentable.send(sym, *args)
     end
-
-    def self.inherited(subclass)
-      @@presenters ||= []
-      @@presenters << subclass
-    end
-
-    def self.presenters
-      @@presenters
-    end
   end
 
-  Base.reveal(:class)
 end

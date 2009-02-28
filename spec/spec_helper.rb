@@ -1,16 +1,14 @@
 require File.join(File.dirname(__FILE__), '../../../../spec/spec_helper.rb')
 
-# unhide the rspec methods so we can test the class
-[:should, :should_not, :kind_of?].each do |sym|
-  SimplePresenter::Base.reveal(sym)
-end
-
 # dummy controller to call #present on
 class Controller
   include SimplePresenter::Helper
 end
 
-# dummy presenter to test against
+# dummy presenters to test against
+class ArrayPresenter < SimplePresenter::Base
+end
+
 class StringPresenter < SimplePresenter::Base
   def ascii_numbers
     # returns an array of the integer number each char in the string represents
@@ -18,6 +16,12 @@ class StringPresenter < SimplePresenter::Base
   end
 
   def ascii_numbers_on_self
+    # returns the same array but calls unpack on self
     unpack("c*")
   end
+end
+
+# unhide some methods so we can test the presentery proxy classes
+[:should, :should_not, :instance_of?, :inspect, :class].each do |sym|
+  [ArrayPresenter, StringPresenter, SimplePresenter::Base].each{|p| p.reveal(sym) }
 end

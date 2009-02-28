@@ -18,21 +18,12 @@ describe SimplePresenter::Base do
     SimplePresenter::Base.new(@presentable, @renderer).renderer.should == @renderer
   end
 
-  it "should track child classes" do
-    class NewPresenter < SimplePresenter::Base; end
-    SimplePresenter::Base.presenters.should include(NewPresenter)
-  end
-
 end
 
 describe SimplePresenter::Helper do
-  before(:all) do
-    @c = Controller.new
-  end
-
   context "once included" do
     it "should define #present" do
-      @c.should respond_to(:present)
+      Controller.new.should respond_to(:present)
     end
   end
 
@@ -40,13 +31,13 @@ describe SimplePresenter::Helper do
 
     context "when given an object with no presenter" do
       it "should return a default presenter" do
-        @c.present(Array.new).should be_a(SimplePresenter::Base)
+        Controller.new.present({:a => 1}).class.should be(SimplePresenter::Base)
       end
     end
 
     context "when given an object with a specific presenter" do
       it "should return that specific presenter" do
-        @c.present(String.new).should be_a(StringPresenter)
+        Controller.new.present([1,2,3]).class.ancestors.should include(ArrayPresenter)
       end
     end
 
