@@ -57,7 +57,8 @@ end
 
 describe StringPresenter do
   before(:all) do
-    @presenter = Controller.new.present("bob")
+    @renderer = Controller.new
+    @presenter = @renderer.present("bob")
   end
 
   it "should provide its methods via the present() helper" do
@@ -66,5 +67,10 @@ describe StringPresenter do
 
   it "should pass methods through from the presenter to the presentable" do
     @presenter.ascii_numbers_on_self.should == [98, 111, 98]
+  end
+
+  it "should fall back on passing methods to the controller" do
+    @renderer.should_receive(:some_cool_url)
+    @presenter.some_cool_url
   end
 end

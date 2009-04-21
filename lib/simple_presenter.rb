@@ -1,14 +1,16 @@
 class SimplePresenter < BlankSlate
   attr_reader :presentable, :renderer
   alias_method :controller, :renderer
-  
+
   def initialize(presentable, renderer)
     @presentable = presentable
     @renderer = renderer
   end
-  
+
   def method_missing(sym, *args)
-    @presentable.send(sym, *args)
+    return @presentable.send(sym, *args)  if @presentable.respond_to?(sym)
+    return @renderer.send(sym, *args)     if @renderer.respond_to?(sym)
+    raise NoMethodError
   end
 end
 
