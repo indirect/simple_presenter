@@ -16,11 +16,19 @@ end
 
 module SimplePresenter::Helper
   def present(presentable)
-    presenter_name = "#{presentable.class}Presenter"
-    if Object.const_defined?(presenter_name)
-      Object.const_get(presenter_name).new(presentable, self)
-    else
-      SimplePresenter.new(presentable, self)
+    @presenter_name = "#{presentable.class}Presenter"
+    if presentable.is_a?(Array) && (presentable.map{|n| n.class }.uniq.size == 1)
+      @array_presenter_name = "#{presentable.first.class}ArrayPresenter"
     end
+
+    if @array_presenter_name && Object.const_defined?(@array_presenter_name)
+      presenter = Object.const_get(@array_presenter_name)
+    elsif @presenter_name && Object.const_defined?(@presenter_name)
+      presenter = Object.const_get(@presenter_name)
+    else
+      presenter = SimplePresenter
+    end
+
+    presenter.new(presentable, self)
   end
 end

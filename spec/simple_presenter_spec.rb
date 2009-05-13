@@ -28,27 +28,33 @@ describe SimplePresenter::Helper do
   end
 
   context "present method" do
+    before do
+      @c = Controller.new
+    end
 
     context "when given an object with no presenter" do
       it "should return a default presenter" do
-        Controller.new.present({:a => 1}).class.
-          ancestors.should include(SimplePresenter)
+        @c.present({:a => 1}).class.ancestors.should include(SimplePresenter)
       end
     end
 
     context "when given an object with a specific presenter" do
       it "should return that specific presenter" do
-        Controller.new.present([1,2,3]).class.
-          ancestors.should include(ArrayPresenter)
+        @c.present([1,2,3]).class.ancestors.should include(ArrayPresenter)
       end
     end
 
     context "when called instances of different classes on a single renderer" do
       it "should return specific presenters for each" do
-        @c = Controller.new
         @c.present("bob").class.ancestors.should include(StringPresenter)
         @c.present([1,2,3]).class.ancestors.should include(ArrayPresenter)
         @c.present({:a => 1}).class.ancestors.should include(SimplePresenter)
+      end
+    end
+
+    context "when given an array of one kind of thing" do
+      it "should return ThingArrayPresenter" do
+        @c.present([1,2,3]).class.should == FixnumArrayPresenter
       end
     end
 
