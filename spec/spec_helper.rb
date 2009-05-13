@@ -6,7 +6,8 @@ rescue
   require 'active_support/vendor/builder-2.1.2/blankslate'
 end
 
-require 'lib/simple_presenter'
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), "../lib"))
+require 'simple_presenter'
 
 
 # dummy controller to call #present on
@@ -16,6 +17,9 @@ end
 
 # dummy presenters to test against
 class ArrayPresenter < SimplePresenter
+end
+
+class FixnumArrayPresenter < ArrayPresenter
 end
 
 class StringPresenter < SimplePresenter
@@ -30,7 +34,7 @@ class StringPresenter < SimplePresenter
   end
 end
 
-# unhide some methods so we can test the presenter proxy classes
+# unhide some methods so we can test the presentery proxy classes
 [:should, :should_not, :instance_of?, :inspect, :class].each do |sym|
   [ArrayPresenter, StringPresenter, SimplePresenter].each{|p| p.reveal(sym) }
 end
