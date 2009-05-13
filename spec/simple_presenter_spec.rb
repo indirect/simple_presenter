@@ -56,6 +56,10 @@ describe SimplePresenter::Helper do
       it "should return ThingArrayPresenter" do
         @c.present([1,2,3]).class.should == FixnumArrayPresenter
       end
+
+      it "should provide presenter methods specific to ThingArrayPresenter" do
+        @c.present([1,2,3]).sum.should == 6
+      end
     end
 
   end

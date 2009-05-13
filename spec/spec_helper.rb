@@ -17,6 +17,9 @@ end
 
 # dummy presenters to test against
 class FixnumArrayPresenter < ArrayPresenter
+  def sum
+    presentable.inject(0){|s,n| s + n }
+  end
 end
 
 class StringPresenter < SimplePresenter
