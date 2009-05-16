@@ -8,13 +8,13 @@ class SimplePresenter < BlankSlate
   end
 
   def inspect
-    "#<#{self.class}:#{self.id} presenter is a: #{@presentable.class}, renderer is a: #{@renderer.class}>"
+    "#<#{self.class}: presenter is a #{@presentable.class}, renderer is a #{@renderer.class}>"
   end
 
   def method_missing(sym, *args)
     return @presentable.send(sym, *args)  if @presentable.respond_to?(sym)
     return @renderer.send(sym, *args)     if @renderer.respond_to?(sym)
-    raise NoMethodError
+    raise NoMethodError, "#{self.class} could not find method `#{sym}`"
   end
 end
 
