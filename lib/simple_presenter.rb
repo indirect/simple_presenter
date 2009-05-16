@@ -35,6 +35,8 @@ class SimplePresenter < BlankSlate
       presenter_name = "#{presentable.class}Presenter"
       if presentable.is_a?(Array) && (presentable.map{|n| n.class }.uniq.size == 1)
         array_presenter_name = "#{presentable.first.class}ArrayPresenter"
+      elsif presentable.is_a?(Array)
+        array_presenter_name = "ArrayPresenter"
       else
         array_presenter_name = nil
       end
