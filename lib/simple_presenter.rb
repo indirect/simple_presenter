@@ -3,6 +3,8 @@ class SimplePresenter < BlankSlate
   alias_method :controller, :renderer
 
   def initialize(presentable, renderer)
+    raise ArgumentError, "you have to present something" unless presentable
+    raise ArgumentError, "you have to have a renderer" unless renderer
     @presentable = presentable
     @renderer = renderer
   end
