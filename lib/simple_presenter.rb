@@ -18,29 +18,37 @@ class SimplePresenter < BlankSlate
     return @renderer.send(sym, *args)     if @renderer.respond_to?(sym)
     raise NoMethodError, "#{self.class} could not find method `#{sym}`"
   end
+
+  def self.namespaced_constant(name)
+    return nil unless name
+    name.split("::").inject(Object) do |l,r|
+      begin
+        l.const_get(r)
+      rescue
+        return nil
+      end
+    end
+  end
+
+  module Helper
+    def present(presentable)
+      presenter_name = "#{presentable.class}Presenter"
+      if presentable.is_a?(Array) && (presentable.map{|n| n.class }.uniq.size == 1)
+        array_presenter_name = "#{presentable.first.class}ArrayPresenter"
+      else
+        array_presenter_name = nil
+      end
+
+      presenter = ( SimplePresenter.namespaced_constant(array_presenter_name) ||
+        SimplePresenter.namespaced_constant(presenter_name) || SimplePresenter )
+
+      presenter.new(presentable, self)
+    end
+  end
 end
 
 [:methods, :class].each do |sym|
   SimplePresenter.reveal(sym)
-end
-
-module SimplePresenter::Helper
-  def present(presentable)
-    @presenter_name = "#{presentable.class}Presenter"
-    if presentable.is_a?(Array) && (presentable.map{|n| n.class }.uniq.size == 1)
-      @array_presenter_name = "#{presentable.first.class}ArrayPresenter"
-    end
-
-    if @array_presenter_name && Object.const_defined?(@array_presenter_name)
-      presenter = Object.const_get(@array_presenter_name)
-    elsif @presenter_name && Object.const_defined?(@presenter_name)
-      presenter = Object.const_get(@presenter_name)
-    else
-      presenter = SimplePresenter
-    end
-
-    presenter.new(presentable, self)
-  end
 end
 
 require 'presenters/array_presenter'

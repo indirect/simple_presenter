@@ -18,6 +18,19 @@ describe SimplePresenter do
     SimplePresenter.new(@presentable, @renderer).renderer.should == @renderer
   end
 
+  describe "namespaced_constant" do
+    it "should return namespaced constants" do
+      SimplePresenter.namespaced_constant("SimplePresenter::Helper").should == SimplePresenter::Helper
+    end
+
+    it "should return nil for nonexistent constants" do
+      SimplePresenter.namespaced_constant("Foo::Bar").should be_nil
+    end
+
+    it "should return nil if passed nil" do
+      SimplePresenter.namespaced_constant(nil).should be_nil
+    end
+  end
 end
 
 describe SimplePresenter::Helper do
@@ -34,21 +47,21 @@ describe SimplePresenter::Helper do
 
     context "when given an object with no presenter" do
       it "should return a default presenter" do
-        @c.present({:a => 1}).class.ancestors.should include(SimplePresenter)
+        @c.present({:a => 1}).class.should == SimplePresenter
       end
     end
 
     context "when given an object with a specific presenter" do
       it "should return that specific presenter" do
-        @c.present([1,2,3]).class.ancestors.should include(ArrayPresenter)
+        @c.present([]).class.should == ArrayPresenter
       end
     end
 
     context "when called instances of different classes on a single renderer" do
       it "should return specific presenters for each" do
-        @c.present("bob").class.ancestors.should include(StringPresenter)
-        @c.present([1,2,3]).class.ancestors.should include(ArrayPresenter)
-        @c.present({:a => 1}).class.ancestors.should include(SimplePresenter)
+        @c.present("bob").class.should == StringPresenter
+        @c.present([]).class.should == ArrayPresenter
+        @c.present({:a => 1}).class.should == SimplePresenter
       end
     end
 

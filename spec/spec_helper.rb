@@ -36,5 +36,5 @@ end
 
 # unhide some methods so we can test the presentery proxy classes
 [:should, :should_not, :instance_of?, :inspect, :class].each do |sym|
-  [ArrayPresenter, StringPresenter, SimplePresenter].each{|p| p.reveal(sym) }
+  [SimplePresenter, StringPresenter, ArrayPresenter, FixnumArrayPresenter].each{|p| p.reveal(sym) }
 end
