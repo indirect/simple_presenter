@@ -18,6 +18,16 @@ describe SimplePresenter do
     SimplePresenter.new(@presentable, @renderer).renderer.should == @renderer
   end
 
+  it "requires a presentable" do
+    lambda { SimplePresenter.new(nil, @renderer) }.
+      should raise_error(ArgumentError, "you have to present something")
+  end
+
+  it "requires a renderer" do
+    lambda { SimplePresenter.new(@presentable, nil) }.
+      should raise_error(ArgumentError, "you have to have a renderer")
+  end
+
   describe "namespaced_constant" do
     it "should return namespaced constants" do
       SimplePresenter.namespaced_constant("SimplePresenter::Helper").should == SimplePresenter::Helper
