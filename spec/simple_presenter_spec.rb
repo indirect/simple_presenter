@@ -70,12 +70,20 @@ describe SimplePresenter::Helper do
         @c.present([1,2,3]).class.should == FixnumArrayPresenter
       end
 
-      it "should fall back on ArrayPresenter" do
-        @c.present(["a", "b", "c"]).class.should == ArrayPresenter
-      end
-
       it "should provide presenter methods specific to ThingArrayPresenter" do
         @c.present([1,2,3]).sum.should == 6
+      end
+
+      context "when ThingArrayPresenter doesn't exist" do
+        it "should fall back on the ClassPresenter" do
+          @c.present(ArrayChild.new).class.should == ArrayChildPresenter
+        end
+      end
+
+      context "when the ClassPresenter doesn't exist" do
+        it "should lastly fall back on ArrayPresenter" do
+          @c.present(["a", "b", "c"]).class.should == ArrayPresenter
+        end
       end
     end
 

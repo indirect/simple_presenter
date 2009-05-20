@@ -36,6 +36,7 @@ class SimplePresenter < BlankSlate
 
       if presentable.is_a?(Array)
         presenter_options.unshift("ArrayPresenter")
+        presenter_options.unshift("#{presentable.class}Presenter")
         classes = presentable.map{|n| n.class }.uniq
         presenter_options.unshift("#{classes.first}ArrayPresenter") if classes.size == 1
       else

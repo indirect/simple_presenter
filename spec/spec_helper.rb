@@ -15,11 +15,18 @@ class Controller
   include SimplePresenter::Helper
 end
 
+# dummy class to present
+class ArrayChild < Array
+end
+
 # dummy presenters to test against
 class FixnumArrayPresenter < ArrayPresenter
   def sum
     presentable.inject(0){|s,n| s + n }
   end
+end
+
+class ArrayChildPresenter < SimplePresenter
 end
 
 class StringPresenter < SimplePresenter
@@ -36,5 +43,10 @@ end
 
 # unhide some methods so we can test the presentery proxy classes
 [:should, :should_not, :instance_of?, :inspect, :class].each do |sym|
-  [SimplePresenter, StringPresenter, ArrayPresenter, FixnumArrayPresenter].each{|p| p.reveal(sym) }
+  [ SimplePresenter,
+    StringPresenter,
+    ArrayPresenter,
+    ArrayChildPresenter,
+    FixnumArrayPresenter
+  ].each{|p| p.reveal(sym) }
 end
