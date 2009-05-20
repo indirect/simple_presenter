@@ -32,18 +32,17 @@ class SimplePresenter < BlankSlate
 
   module Helper
     def present(presentable)
-      presenter_name = "#{presentable.class}Presenter"
-      if presentable.is_a?(Array) && (presentable.map{|n| n.class }.uniq.size == 1)
-        array_presenter_name = "#{presentable.first.class}ArrayPresenter"
-      elsif presentable.is_a?(Array)
-        array_presenter_name = "ArrayPresenter"
+      presenter_options = ["SimplePresenter"]
+
+      if presentable.is_a?(Array)
+        presenter_options.unshift("ArrayPresenter")
+        classes = presentable.map{|n| n.class }.uniq
+        presenter_options.unshift("#{classes.first}ArrayPresenter") if classes.size == 1
       else
-        array_presenter_name = nil
+        presenter_options.unshift("#{presentable.class}Presenter")
       end
 
-      presenter = ( SimplePresenter.namespaced_constant(array_presenter_name) ||
-        SimplePresenter.namespaced_constant(presenter_name) || SimplePresenter )
-
+      presenter = presenter_options.map{|o| SimplePresenter.namespaced_constant(o) }.compact.first
       presenter.new(presentable, self)
     end
   end
