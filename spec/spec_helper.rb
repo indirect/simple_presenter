@@ -16,9 +16,6 @@ class Controller
 end
 
 # dummy presenters to test against
-class ArrayPresenter < SimplePresenter
-end
-
 class FixnumArrayPresenter < ArrayPresenter
 end
 

@@ -32,3 +32,5 @@ module SimplePresenter::Helper
     presenter.new(presentable, self)
   end
 end
+
+require 'presenters/array_presenter'

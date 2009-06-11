@@ -1,0 +1,2 @@
+class ArrayPresenter < SimplePresenter
+end
